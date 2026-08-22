@@ -1,0 +1,19 @@
+{
+  "name": "freya-boutique",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Фрейя — витрина бутика женской одежды: статика + сервер каталога и медиа (Timeweb Cloud + S3)",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "dev": "STORAGE_DRIVER=local HOST=0.0.0.0 node server/server.js",
+    "health": "node scripts/health.js",
+    "hash-password": "node scripts/hash-password.js",
+    "migrate": "node scripts/migrate-catalog.js",
+    "gc-media": "node scripts/gc-media.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {}
+}

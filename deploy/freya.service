@@ -1,0 +1,51 @@
+# =========================================================================
+#  systemd-юнит для сервера «Фрейя».
+#
+#  Куда положить:  /etc/systemd/system/freya.service
+#  Потом:
+#     systemctl daemon-reload
+#     systemctl enable --now freya
+#     systemctl status freya
+#     journalctl -u freya -f        # живые логи
+# =========================================================================
+
+[Unit]
+Description=Freya boutique server (catalog + media)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=freya
+Group=freya
+
+# current — симлинк на активный релиз
+WorkingDirectory=/srv/freya/current
+EnvironmentFile=/srv/freya/.env
+ExecStart=/usr/bin/node server/server.js
+
+Restart=always
+RestartSec=3
+KillSignal=SIGTERM
+TimeoutStopSec=30
+
+# Данные и временные файлы — вне папки с кодом
+ReadWritePaths=/srv/freya/data
+StateDirectory=freya
+
+# Немного изоляции
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+
+# ffmpeg любит память — страхуемся от убитого сервера на маленьком VPS
+MemoryMax=1500M
+CPUWeight=80
+
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=freya
+
+[Install]
+WantedBy=multi-user.target

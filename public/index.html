@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<!--
+  Фрейя — мобильный сайт бутика женской одежды.
+  Страницы разделены: одновременно виден только один экран (hash-роутер):
+    #/            — Главная (только Новинки)
+    #/catalog/all — Каталог и подразделы (dresses / suits / outerwear / tops)
+    #/product/id  — Карточка товара (описание + состав)
+    #/cart        — Корзина
+    #/checkout    — Оформление заказа (имя + телефон, как на макете)
+    #/done        — Заказ принят
+  Тексты шапки, баннера, названия и цены взяты с макета дословно (бренд на макете — «Фрейя»).
+-->
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#17291D">
+<meta name="description" content="Фрейя — бутик женской одежды. Премиальный опыт покупок.">
+<title>Фрейя — бутик женской одежды</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- На макете логотип и заголовки набраны контрастной антиквой (тип Playfair Display / Prata) -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ============ ШАПКА (единая для всех страниц, логотип по центру как на макете) ============ -->
+<header class="app-header" id="appHeader">
+  <button class="hdr-btn" id="menuBtn" aria-label="Каталог" aria-haspopup="true" aria-expanded="false">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6.5h18M3 12h18M3 17.5h18"/></svg>
+  </button>
+  <a class="logo" href="#/">Фрейя</a>
+  <a class="hdr-btn hdr-cart" href="#/cart" id="cartBtn" aria-label="Корзина">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M4.5 8.5h15l-1 11.5h-13z"/>
+      <path d="M9 8.5V7a3 3 0 0 1 6 0v1.5"/>
+    </svg>
+    <span class="cart-count" id="cartCount">3</span>
+  </a>
+</header>
+
+<main id="app">
+
+  <!-- ==================== СТРАНИЦА 1. ГЛАВНАЯ — только НОВИНКИ ==================== -->
+  <section class="view" id="view-home" hidden>
+    <div class="collection-bar">НОВАЯ КОЛЛЕКЦИЯ • ВЕСНА–ЛЕТО 2025</div>
+
+    <!-- плитки категорий собираются из данных админки -->
+    <nav class="cats" id="catsNav" aria-label="Категории"></nav>
+
+    <div class="section-head">
+      <h1 class="h-serif">Новинки</h1>
+      <a class="link-all" href="#/catalog/all">Смотреть все</a>
+    </div>
+
+    <div class="grid grid-2" id="newGrid"></div>
+
+    <a class="btn-outline" href="#/catalog/all">Перейти в каталог</a>
+  </section>
+
+  <!-- ==================== СТРАНИЦА 2. КАТАЛОГ ==================== -->
+  <section class="view" id="view-catalog" hidden>
+    <h1 class="screen-title h-serif" id="catalogTitle">Каталог</h1>
+
+    <!-- Подразделы каталога -->
+    <nav class="tabs" id="catalogTabs" aria-label="Подразделы каталога"></nav>
+
+    <div class="toolbar">
+      <button class="tb-filters" type="button" id="filtersBtn">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h13M18 7h3M3 12h4M9 12h12M3 17h10M15 17h6"/><circle cx="17" cy="7" r="2"/><circle cx="8" cy="12" r="2"/><circle cx="14" cy="17" r="2"/></svg>
+        <span>Фильтры</span>
+      </button>
+
+      <div class="tb-sort-wrap">
+        <button class="tb-sort" type="button" id="sortBtn" aria-haspopup="listbox" aria-expanded="false">
+          <span id="sortLabel">По популярности</span>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9.5l6 6 6-6"/></svg>
+        </button>
+        <ul class="sort-menu" id="sortMenu" role="listbox" hidden>
+          <li role="option" tabindex="0" data-sort="popular" aria-selected="true">По популярности</li>
+          <li role="option" tabindex="0" data-sort="new" aria-selected="false">По новизне</li>
+          <li role="option" tabindex="0" data-sort="asc" aria-selected="false">Цена: по возрастанию</li>
+          <li role="option" tabindex="0" data-sort="desc" aria-selected="false">Цена: по убыванию</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grid grid-2" id="catalogGrid"></div>
+    <p class="empty-state" id="catalogEmpty" hidden>В этом разделе товары появятся скоро</p>
+  </section>
+
+  <!-- ==================== СТРАНИЦА 3. КАРТОЧКА ТОВАРА ==================== -->
+  <section class="view view-pdp" id="view-product" hidden>
+    <div class="pdp-hero" id="pdpHero" role="button" tabindex="0" aria-label="Открыть галерею товара">
+      <img id="pdpImage" src="" alt="">
+      <video id="pdpVideo" playsinline muted loop preload="none" disablepictureinpicture hidden></video>
+      <div class="pdp-hero-bar">
+        <button class="round-btn" type="button" id="pdpBack" aria-label="Назад">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5.5l-7 6.5 7 6.5"/></svg>
+        </button>
+      </div>
+      <button class="hero-arrow hero-prev" type="button" id="pdpPrev" aria-label="Предыдущее фото">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5.5l-7 6.5 7 6.5"/></svg>
+      </button>
+      <button class="hero-arrow hero-next" type="button" id="pdpNext" aria-label="Следующее фото">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 5.5l7 6.5-7 6.5"/></svg>
+      </button>
+      <button class="round-btn hero-sound" type="button" id="pdpSound" aria-label="Включить звук" hidden></button>
+      <button class="play-btn" type="button" id="pdpPlay" aria-label="Включить видео" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.4l11.2 6.6L8 18.6z"/></svg><span class="play-cap">Смотреть видео</span></button>
+
+      <span class="hero-counter" id="pdpCounter">1 / 5</span>
+      <div class="hero-dots" id="pdpDots"></div>
+
+      <span class="pdp-hero-hint">Нажмите на фото</span>
+    </div>
+
+    <div class="pdp-sheet">
+      <h1 class="pdp-title h-serif" id="pdpTitle"></h1>
+      <p class="pdp-price h-serif" id="pdpPrice"></p>
+
+      <p class="field-label">Цвет: <span id="colorName">Изумрудный</span></p>
+      <div class="swatches" id="swatches"></div>
+
+      <p class="field-label">Размер</p>
+      <div class="sizes" id="sizes"></div>
+
+      <button class="btn-gold" type="button" id="pdpAdd">Добавить в корзину</button>
+
+      <!-- Описание и состав -->
+      <div class="accordions">
+        <details class="acc" open>
+          <summary><span>Описание</span><i aria-hidden="true"></i></summary>
+          <p id="pdpDescription"></p>
+        </details>
+
+        <details class="acc">
+          <summary><span>Состав и уход</span><i aria-hidden="true"></i></summary>
+          <ul class="spec-list" id="pdpComposition"></ul>
+        </details>
+      </div>
+
+      <!-- Сопутствующие товары -->
+      <div class="section-head section-head--pdp">
+        <h2 class="h-serif">С этим сочетают</h2>
+      </div>
+      <div class="grid grid-2 grid--flush" id="pdpRelated"></div>
+    </div>
+  </section>
+
+  <!-- ==================== СТРАНИЦА 4. КОРЗИНА ==================== -->
+  <section class="view" id="view-cart" hidden>
+    <h1 class="screen-title h-serif">Корзина (<span id="cartTitleCount">3</span>)</h1>
+
+    <div class="cart-list" id="cartList"></div>
+
+    <p class="empty-state" id="cartEmpty" hidden>Корзина пуста</p>
+
+    <div class="cart-total" id="cartTotalRow">
+      <span class="h-serif">Итого</span>
+      <span class="h-serif" id="cartTotal">31 700 ₽</span>
+    </div>
+
+    <a class="btn-gold" href="#/checkout" id="cartCheckout">Оформить заказ</a>
+    <a class="btn-outline" href="#/catalog/all">Продолжить покупки</a>
+
+    <p class="brand-tagline brand-tagline--cart">БУТИК ЖЕНСКОЙ ОДЕЖДЫ<br>ПРЕМИАЛЬНЫЙ ОПЫТ ПОКУПОК</p>
+  </section>
+
+
+  <!-- ==================== СТРАНИЦА 5. ОФОРМЛЕНИЕ ЗАКАЗА ==================== -->
+  <section class="view view-checkout" id="view-checkout" hidden>
+    <h1 class="screen-title h-serif">Формирование заказа</h1>
+
+    <div class="order-summary">
+      <span>Товаров: <span id="orderCount">3</span></span>
+      <span class="h-serif" id="orderTotal">31 700 ₽</span>
+    </div>
+
+    <form class="order-form" id="orderForm" novalidate>
+      <p class="form-label">Имя</p>
+      <input class="input" type="text" id="orderName" name="name" placeholder="Введите имя" autocomplete="name">
+
+      <p class="form-label">Телефон</p>
+      <input class="input" type="tel" id="orderPhone" name="phone" placeholder="+7 (999) 999-9999" autocomplete="tel" inputmode="tel">
+
+      <label class="check check--order">
+        <input type="checkbox" id="orderAgree" checked>
+        <span>Согласен с обработкой персональных данных</span>
+      </label>
+
+      <button class="btn-gold btn-gold--form" type="submit" id="orderSubmit">Оформить заказ</button>
+    </form>
+
+    <p class="privacy">
+      <svg class="lock" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></svg>Ваши данные под защитой
+    </p>
+
+    <div class="wave" aria-hidden="true">
+      <svg viewBox="0 0 393 150" preserveAspectRatio="none"><path d="M0 62 C 58 22, 118 98, 196 68 C 272 40, 332 96, 393 54 L393 150 L0 150 Z" fill="#17291D"/></svg>
+    </div>
+  </section>
+
+  <!-- ==================== СТРАНИЦА 6. ЗАКАЗ ПРИНЯТ ==================== -->
+  <section class="view view-done" id="view-done" hidden>
+    <div class="done-card">
+      <div class="done-mark">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+      </div>
+      <h1 class="h-serif">Заказ принят</h1>
+      <p id="doneText">Мы перезвоним для подтверждения заказа.</p>
+      <a class="btn-gold" href="#/catalog/all">Продолжить покупки</a>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ БОКОВОЕ МЕНЮ КАТАЛОГА (три полоски слева вверху) ============ -->
+<div class="drawer-overlay" id="drawerOverlay" hidden>
+  <nav class="drawer" role="dialog" aria-modal="true" aria-label="Каталог">
+    <div class="drawer-head">
+      <span class="h-serif">Каталог</span>
+      <button class="sheet-x" type="button" id="drawerClose" aria-label="Закрыть">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+
+    <ul class="drawer-list" id="drawerList"></ul>
+
+    <ul class="drawer-list drawer-list--secondary">
+      <li><a href="#/cart">Корзина<i id="drawerCartCount">3</i></a></li>
+    </ul>
+
+    <p class="drawer-foot">БУТИК ЖЕНСКОЙ ОДЕЖДЫ<br>ПРЕМИАЛЬНЫЙ ОПЫТ ПОКУПОК</p>
+  </nav>
+</div>
+
+<!-- ============ ГАЛЕРЕЯ ТОВАРА (полноэкранная карусель) ============ -->
+<div class="gallery" id="gallery" role="dialog" aria-modal="true" aria-label="Галерея товара" hidden>
+  <button class="g-close" type="button" id="gClose" aria-label="Закрыть">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </button>
+
+  <div class="g-stage" id="gStage">
+    <img id="gImage" src="" alt="">
+    <video id="gVideo" playsinline muted loop preload="none" disablepictureinpicture hidden></video>
+  </div>
+
+  <button class="g-sound" type="button" id="gSound" aria-label="Включить звук" hidden></button>
+  <button class="play-btn g-play" type="button" id="gPlay" aria-label="Включить видео" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.4l11.2 6.6L8 18.6z"/></svg><span class="play-cap">Смотреть видео</span></button>
+
+  <button class="g-arrow g-prev" type="button" id="gPrev" aria-label="Предыдущее фото">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5.5l-7 6.5 7 6.5"/></svg>
+  </button>
+  <button class="g-arrow g-next" type="button" id="gNext" aria-label="Следующее фото">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 5.5l7 6.5-7 6.5"/></svg>
+  </button>
+
+  <div class="g-dots" id="gDots"></div>
+</div>
+
+<!-- ============ МОДАЛКА ФИЛЬТРОВ ============ -->
+<div class="sheet-overlay" id="filtersOverlay" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-label="Фильтры">
+    <div class="sheet-head">
+      <span class="h-serif">Фильтры</span>
+      <button class="sheet-x" type="button" id="filtersClose" aria-label="Закрыть">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+
+    <p class="sheet-group">Категория</p>
+    <div id="filtersCats"></div>
+
+    <p class="sheet-group">Размер</p>
+    <div class="sizes sizes--sheet" id="filtersSizes"></div>
+
+    <button class="btn-gold" type="button" id="filtersApply">Показать товары</button>
+  </div>
+</div>
+
+<!-- ============ TOAST ============ -->
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="api.js?v=2"></script>
+<script src="data.js?v=2"></script>
+<script src="script.js?v=2"></script>
+</body>
+</html>

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<!--
+  Фрейя — закрытая панель управления (адрес: /admin.html)
+  Вход только по паролю. Пароль по умолчанию — 242564 (меняется в разделе «Настройки»).
+  Все изменения сохраняются сразу и тут же видны на сайте.
+-->
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#17291D">
+<meta name="robots" content="noindex, nofollow">
+<title>Фрейя — панель управления</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+<!-- ==================== ЭКРАН ВХОДА ==================== -->
+<div class="lock" id="lock">
+  <form class="lock-card" id="lockForm" autocomplete="off">
+    <p class="lock-logo">Фрейя</p>
+    <p class="lock-sub">Панель управления</p>
+
+    <input class="input" type="password" id="pass" inputmode="numeric" placeholder="Пароль" aria-label="Пароль">
+    <p class="lock-error" id="lockError" hidden>Неверный пароль</p>
+
+    <button class="btn-gold" type="submit">Войти</button>
+    <p class="lock-note">Закрытый раздел. Сеанс завершается при закрытии вкладки.</p>
+  </form>
+</div>
+
+<!-- ==================== АДМИНКА ==================== -->
+<div id="app" hidden>
+
+  <header class="a-header">
+    <span class="a-logo">Фрейя</span>
+    <span class="a-sub">админка</span>
+    <a class="a-ghost" href="index.html" target="_blank" rel="noopener">Сайт</a>
+    <button class="a-ghost" type="button" id="logoutBtn">Выйти</button>
+  </header>
+
+  <nav class="a-tabs" id="aTabs">
+    <button class="a-tab is-active" type="button" data-tab="products">Товары</button>
+    <button class="a-tab" type="button" data-tab="cats">Категории</button>
+    <button class="a-tab" type="button" data-tab="settings">Настройки</button>
+    <button class="a-tab" type="button" data-tab="data">Данные</button>
+  </nav>
+
+  <main class="a-main">
+
+    <!-- ---------- ТОВАРЫ ---------- -->
+    <section class="a-view" id="tab-products">
+      <div class="a-bar">
+        <input class="input" type="search" id="search" placeholder="Поиск по названию">
+        <button class="btn-gold btn-sm" type="button" id="addProduct">+ Товар</button>
+      </div>
+      <p class="a-hint">Галочки «Новинка», «Акция» и «Виден» сохраняются сразу. Стрелки меняют порядок в каталоге.</p>
+
+      <div class="p-list" id="pList"></div>
+      <p class="a-empty" id="pEmpty" hidden>Ничего не найдено</p>
+    </section>
+
+    <!-- ---------- КАТЕГОРИИ ---------- -->
+    <section class="a-view" id="tab-cats" hidden>
+      <div class="a-card">
+        <h2 class="a-h2">Новая категория</h2>
+        <input class="input" type="text" id="newCatTitle" placeholder="Название, например «Юбки»">
+        <select class="input" id="newCatIcon" aria-label="Иконка"></select>
+        <button class="btn-gold" type="button" id="addCat">Добавить категорию</button>
+      </div>
+
+      <p class="a-hint">Порядок категорий здесь = порядок в меню, на главной и в фильтрах.</p>
+      <div class="c-list" id="cList"></div>
+    </section>
+
+    <!-- ---------- НАСТРОЙКИ ---------- -->
+    <section class="a-view" id="tab-settings" hidden>
+      <div class="a-card">
+        <h2 class="a-h2">Тексты сайта</h2>
+        <label class="f-label">Название магазина
+          <input class="input" id="sShop">
+        </label>
+        <label class="f-label">Текст золотой полосы на главной
+          <input class="input" id="sBanner">
+        </label>
+        <label class="f-label">Подпись, строка 1
+          <input class="input" id="sTag1">
+        </label>
+        <label class="f-label">Подпись, строка 2
+          <input class="input" id="sTag2">
+        </label>
+        <button class="btn-gold" type="button" id="saveSettings">Сохранить тексты</button>
+      </div>
+
+      <div class="a-card">
+        <h2 class="a-h2">Пароль в админку</h2>
+        <label class="f-label">Новый пароль
+          <input class="input" id="pass1" type="text" inputmode="numeric" autocomplete="off">
+        </label>
+        <label class="f-label">Повторите пароль
+          <input class="input" id="pass2" type="text" inputmode="numeric" autocomplete="off">
+        </label>
+        <button class="btn-outline" type="button" id="savePass">Сменить пароль</button>
+        <p class="a-hint" id="passHint"></p>
+      </div>
+    </section>
+
+    <!-- ---------- ДАННЫЕ ---------- -->
+    <section class="a-view" id="tab-data" hidden>
+      <div class="a-card">
+        <h2 class="a-h2">Состояние</h2>
+        <div id="dStats"></div>
+      </div>
+
+      <div class="a-card">
+        <h2 class="a-h2">Файл каталога</h2>
+        <button class="btn-gold" type="button" id="exportBtn">Скачать catalog.json</button>
+        <label class="btn-outline file-btn">Загрузить catalog.json
+          <input type="file" id="importFile" accept=".json,application/json">
+        </label>
+        <button class="btn-danger" type="button" id="resetBtn">Сбросить к заводским данным</button>
+      </div>
+
+      <div class="a-note">
+        <p class="a-note-title">Как показать изменения всем посетителям</p>
+        <ol>
+          <li>Правки из админки сразу видны на этом устройстве — можно спокойно всё проверить.</li>
+          <li>Когда всё нравится — нажмите «Скачать catalog.json».</li>
+          <li>Положите файл в корень проекта (рядом с index.html) и задеплойте на Railway.</li>
+          <li>Сайт подхватит catalog.json автоматически — каталог увидят все посетители.</li>
+        </ol>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ==================== РЕДАКТОР ТОВАРА ==================== -->
+<div class="editor" id="editor" hidden>
+  <header class="e-header">
+    <button class="a-ghost" type="button" id="eCancel">Отмена</button>
+    <span class="e-title" id="eTitle">Новый товар</span>
+    <button class="btn-gold btn-sm" type="button" id="eSave">Сохранить</button>
+  </header>
+
+  <div class="e-body">
+    <label class="f-label">Название товара
+      <input class="input" id="fName" placeholder="Например: Платье с драпировкой">
+    </label>
+
+    <label class="f-label">Категория
+      <select class="input" id="fCategory"></select>
+    </label>
+
+    <div class="f-row">
+      <label class="f-label">Цена, ₽
+        <input class="input" id="fPrice" type="number" inputmode="numeric" min="0" step="100">
+      </label>
+      <label class="f-label">Цена до скидки, ₽
+        <input class="input" id="fOldPrice" type="number" inputmode="numeric" min="0" step="100" placeholder="нет">
+      </label>
+    </div>
+
+    <div class="f-checks">
+      <label class="check"><input type="checkbox" id="fNew"><span>Новинка</span></label>
+      <label class="check"><input type="checkbox" id="fSale"><span>По акции</span></label>
+      <label class="check"><input type="checkbox" id="fActive"><span>Показывать на сайте</span></label>
+    </div>
+
+    <h3 class="a-h3">Фотографии</h3>
+    <p class="a-hint">Первое фото — основное: его видно в каталоге и в корзине. Кнопка ★ делает фото основным, стрелки меняют порядок.</p>
+
+    <div class="ph-grid" id="fPhotos"></div>
+
+    <label class="btn-outline file-btn">Загрузить фото с устройства
+      <input type="file" id="photoFile" accept="image/*" multiple>
+    </label>
+
+    <div class="f-row">
+      <input class="input" id="photoUrl" placeholder="Или ссылка на фото">
+      <button class="btn-outline btn-sm" type="button" id="photoUrlAdd">Добавить</button>
+    </div>
+
+    <h3 class="a-h3">Видео</h3>
+    <p class="a-hint">В карточке видео включается само и идёт по кругу, без полосы времени и кнопок плеера. Звук записывается, но первые секунды ролик идёт тихо: браузеры запрещают автозапуск со звуком, пока покупатель не нажмёт кнопку динамика на кадре — дальше выбор запоминается. Ролик пережимает сервер: всегда 1080p, 30 кадров, максимум 20 секунд. Достаточно дождаться полосы загрузки — дальше всё считается на сервере, телефон можно убрать. Видео показывается после фотографий.</p>
+    <div class="ph-grid" id="fVideos"></div>
+
+    <p class="a-hint"><b>1080p · 30 кадров · до 20 секунд.</b> Качество одинаковое для всех роликов — выбирать ничего не нужно.</p>
+
+    <div class="f-checks">
+      <label class="check"><input type="checkbox" id="videoSound" checked><span>Записать со звуком</span></label>
+    </div>
+
+    <label class="btn-outline file-btn">Загрузить видео с устройства
+      <input type="file" id="videoFile" accept="video/*">
+    </label>
+
+    <div class="f-row">
+      <input class="input" id="videoUrl" placeholder="Или ссылка на видео (.mp4)">
+      <button class="btn-outline btn-sm" type="button" id="videoUrlAdd">Добавить</button>
+    </div>
+
+    <h3 class="a-h3">Цвет и размеры</h3>
+    <label class="f-label">Название цвета
+      <input class="input" id="fColor" placeholder="Изумрудный">
+    </label>
+
+    <p class="f-cap">Оттенки под названием товара</p>
+    <div class="sw-list" id="fColors"></div>
+    <button class="btn-outline btn-sm" type="button" id="addColor">+ Оттенок</button>
+
+    <p class="f-cap">Доступные размеры</p>
+    <div class="sz-list" id="fSizes"></div>
+    <div class="f-row">
+      <input class="input" id="newSize" placeholder="Свой размер, напр. XXL">
+      <button class="btn-outline btn-sm" type="button" id="addSize">Добавить</button>
+    </div>
+
+    <h3 class="a-h3">Описание</h3>
+    <textarea class="input textarea" id="fDesc" rows="6" placeholder="Из чего сшито, как сидит, с чем носить…"></textarea>
+
+    <h3 class="a-h3">Состав и уход</h3>
+    <p class="a-hint">Каждый пункт — с новой строки.</p>
+    <textarea class="input textarea" id="fComp" rows="6" placeholder="100% натуральный шелк&#10;Сухая чистка"></textarea>
+
+    <button class="btn-danger" type="button" id="eDelete">Удалить товар</button>
+  </div>
+</div>
+
+<div class="a-toast" id="aToast" role="status" aria-live="polite"></div>
+
+<script src="api.js?v=2"></script>
+<script src="data.js?v=2"></script>
+<script src="admin.js?v=2"></script>
+</body>
+</html>
