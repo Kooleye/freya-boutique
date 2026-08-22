@@ -47,16 +47,18 @@ html {
   -webkit-text-size-adjust: 100%;
   overscroll-behavior-y: none;
   scroll-behavior: auto;
-}
-
-body {
-  margin: 0;
   background-color: var(--green-deep);
   background-image: linear-gradient(rgba(8, 19, 15, .34), rgba(8, 19, 15, .34)), url("bg-fabric.jpg");
   background-size: cover;
   background-position: center top;
   background-repeat: no-repeat;
   background-attachment: fixed;
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background: transparent;
   color: var(--text);
   font-family: var(--font-ui);
   font-size: 13px;
