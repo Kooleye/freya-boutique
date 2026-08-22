@@ -51,7 +51,12 @@ html {
 
 body {
   margin: 0;
-  background: var(--bg);
+  background-color: var(--green-deep);
+  background-image: linear-gradient(rgba(8, 19, 15, .34), rgba(8, 19, 15, .34)), url("bg-fabric.jpg");
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   color: var(--text);
   font-family: var(--font-ui);
   font-size: 13px;
