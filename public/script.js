@@ -910,15 +910,9 @@
 
   /* --------------- Сборка интерфейса из данных админки --------------- */
 
-  // Новинки: не меньше шести карточек — если отмечено меньше, добираем остальными
+  // Новинки: показываем только товары, отмеченные галочкой «Новинка» в админке
   function newProducts() {
-    var list = PRODUCTS.filter(function (p) { return p.isNew; });
-    if (list.length < 6) {
-      PRODUCTS.forEach(function (p) {
-        if (list.length < 6 && list.indexOf(p) === -1) list.push(p);
-      });
-    }
-    return list;
+    return PRODUCTS.filter(function (p) { return p.isNew; });
   }
 
   function renderCategoryNav() {
