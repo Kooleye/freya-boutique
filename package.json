@@ -10,7 +10,8 @@
     "health": "node scripts/health.js",
     "hash-password": "node scripts/hash-password.js",
     "migrate": "node scripts/migrate-catalog.js",
-    "gc-media": "node scripts/gc-media.js"
+    "gc-media": "node scripts/gc-media.js",
+    "bump-cache": "node scripts/bump-cache-version.js"
   },
   "engines": {
     "node": ">=20"
