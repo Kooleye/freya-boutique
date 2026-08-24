@@ -1295,3 +1295,70 @@ body.is-pdp .site-footer { display: none !important; }
   background: #F2EADB !important;
   transform: translateY(1px);
 }
+
+
+/* Возврат старого тёмного подвала без крупного названия «Фрейя» */
+.site-footer {
+  margin-top: 24px !important;
+  padding: 24px var(--pad) calc(28px + env(safe-area-inset-bottom)) !important;
+  background: var(--green-header) !important;
+  color: #F6F0E5 !important;
+  border-top: 0 !important;
+}
+body.is-pdp .site-footer { display: none !important; }
+.site-footer .footer-brand,
+.site-footer .footer-subtitle,
+.site-footer .footer-divider,
+.site-footer .footer-inner > .footer-brand {
+  display: none !important;
+}
+.footer-inner { padding: 0 !important; }
+.footer-nav {
+  display: grid !important;
+  gap: 0 !important;
+  margin: 0 !important;
+}
+.footer-nav a,
+.footer-link {
+  min-height: 54px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 0 2px !important;
+  border: 0 !important;
+  border-bottom: 1px solid rgba(216, 188, 133, .22) !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: var(--gold-logo) !important;
+  font-size: 13px !important;
+  line-height: 1.25 !important;
+  text-decoration: none !important;
+}
+.footer-nav a::after,
+.footer-link::after {
+  content: "" !important;
+  width: 9px !important;
+  height: 9px !important;
+  border-right: 1.5px solid currentColor !important;
+  border-bottom: 1.5px solid currentColor !important;
+  transform: rotate(-45deg) !important;
+  opacity: .9 !important;
+  flex: 0 0 auto !important;
+}
+.footer-nav a span,
+.footer-link span {
+  display: inline !important;
+  color: inherit !important;
+  font-size: inherit !important;
+  font-weight: inherit !important;
+}
+.footer-nav a i,
+.footer-link i { display: none !important; }
+.footer-copy {
+  margin: 18px 0 0 !important;
+  color: rgba(246, 240, 229, .55) !important;
+  font-size: 10.5px !important;
+  line-height: 1.55 !important;
+  text-align: center !important;
+}
