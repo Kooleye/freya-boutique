@@ -1362,3 +1362,52 @@ body.is-pdp .site-footer { display: none !important; }
   line-height: 1.55 !important;
   text-align: center !important;
 }
+
+
+/* Компактный подвал в две строки */
+.site-footer.site-footer--compact {
+  margin-top: 18px !important;
+  padding: 14px var(--pad) calc(14px + env(safe-area-inset-bottom)) !important;
+  background: var(--green-header) !important;
+  color: #F6F0E5 !important;
+}
+.footer-nav.footer-nav--compact {
+  display: grid !important;
+  gap: 8px !important;
+  margin: 0 !important;
+}
+.footer-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 7px;
+}
+.footer-row--legal {
+  grid-template-columns: 1fr 1fr;
+}
+.footer-nav--compact a {
+  min-height: 34px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 7px 6px !important;
+  border: 1px solid rgba(216, 188, 133, .28) !important;
+  border-radius: 8px !important;
+  background: rgba(255,255,255,.035) !important;
+  color: var(--gold-logo) !important;
+  font-size: 11px !important;
+  line-height: 1.15 !important;
+  text-align: center !important;
+  text-decoration: none !important;
+}
+.footer-nav--compact a::after { display: none !important; content: none !important; }
+.footer-nav--compact a:active { background: rgba(216,188,133,.12) !important; transform: translateY(1px); }
+.site-footer--compact .footer-copy {
+  margin: 10px 0 0 !important;
+  color: rgba(246,240,229,.55) !important;
+  font-size: 9.5px !important;
+  line-height: 1.35 !important;
+  text-align: center !important;
+}
+@media (max-width: 360px) {
+  .footer-nav--compact a { font-size: 10px !important; padding-inline: 4px !important; }
+}
