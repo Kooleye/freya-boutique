@@ -498,7 +498,7 @@
     if (e.target === e.currentTarget) closeFilters();
   });
   $("#filtersApply").addEventListener("click", function () {
-    var picked = $$("#filtersOverlay input[type=checkbox]:checked").length;
+    var picked = $$("#filtersCats input[type=checkbox]:checked").length;
     closeFilters();
     toast(picked ? "Фильтры применены: " + picked : "Фильтры сброшены");
   });
@@ -965,13 +965,6 @@
       return '<label class="check"><input type="checkbox" value="' + c.slug + '"><span>' + esc(c.title) + '</span></label>';
     }).join("");
 
-    var sizes = [];
-    PRODUCTS.forEach(function (p) {
-      p.sizes.forEach(function (size) { if (sizes.indexOf(size) === -1) sizes.push(size); });
-    });
-    $("#filtersSizes").innerHTML = sizes.map(function (size) {
-      return '<button class="size" type="button">' + esc(size) + '</button>';
-    }).join("");
   }
 
   function applySettings() {
