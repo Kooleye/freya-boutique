@@ -856,7 +856,12 @@
     product: "#view-product",
     cart: "#view-cart",
     checkout: "#view-checkout",
-    done: "#view-done"
+    done: "#view-done",
+    shops: "#view-shops",
+    personal: "#view-personal",
+    details: "#view-details",
+    contacts: "#view-contacts",
+    policy: "#view-policy"
   };
 
   var routeSteps = 0;
@@ -890,6 +895,8 @@
   }
 
   window.addEventListener("hashchange", route);
+  var footerYear = $("#footerYear");
+  if (footerYear) footerYear.textContent = new Date().getFullYear();
 
   document.addEventListener("keydown", function (e) {
     if (e.key === "Escape") {

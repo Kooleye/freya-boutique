@@ -1125,3 +1125,22 @@ video::-webkit-media-controls-fullscreen-button {
 
 .g-play { z-index: 6; width: 72px; height: 72px; }
 .g-play svg { width: 30px; height: 30px; }
+
+
+/* ============================== ЮРИДИЧЕСКИЙ БЛОК И ПОДВАЛ ============================== */
+.inline-link { color: var(--gold-btn); text-decoration: underline; text-underline-offset: 2px; }
+.check--order span { line-height: 1.35; }
+.check--order input { flex: 0 0 auto; }
+.view-info { padding-bottom: 28px; }
+.legal-card { margin: 14px var(--pad) 0; padding: 16px; border: 1px solid var(--border); border-radius: var(--r-lg); background: var(--surface); }
+.legal-card h2 { margin: 18px 0 8px; font-family: var(--font-serif); font-size: 18px; font-weight: 400; line-height: 1.2; }
+.legal-card h2:first-of-type { margin-top: 12px; }
+.legal-card p { margin: 8px 0; color: var(--text); font-size: 13px; line-height: 1.55; }
+.legal-note { padding: 10px 12px; border-radius: var(--r-md); background: #F2EADB; color: #5F4722 !important; }
+.site-footer { margin-top: 24px; padding: 24px var(--pad) calc(28px + env(safe-area-inset-bottom)); background: var(--green-header); color: #F6F0E5; }
+body.is-pdp .site-footer { display: none; }
+.footer-brand { margin-bottom: 14px; color: var(--gold-logo); font-size: 25px; line-height: 1; text-align: center; }
+.footer-nav { display: grid; gap: 8px; margin-top: 14px; }
+.footer-nav a { min-height: 46px; display: flex; align-items: center; justify-content: space-between; padding: 0 2px; border-bottom: 1px solid rgba(216,188,133,.22); color: var(--gold-logo); font-size: 13px; line-height: 1.25; }
+.footer-nav a::after { content: ""; width: 8px; height: 8px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: rotate(-45deg); opacity: .9; }
+.footer-copy { margin: 18px 0 0; color: rgba(246,240,229,.55); font-size: 10.5px; line-height: 1.55; text-align: center; }

@@ -185,8 +185,8 @@
       <input class="input" type="tel" id="orderPhone" name="phone" placeholder="+7 (999) 999-9999" autocomplete="tel" inputmode="tel">
 
       <label class="check check--order">
-        <input type="checkbox" id="orderAgree" checked>
-        <span>Согласен с обработкой персональных данных</span>
+        <input type="checkbox" id="orderAgree">
+        <span>Я согласен(на) на обработку персональных данных. <a class="inline-link" href="#/personal">Подробнее</a></span>
       </label>
 
       <button class="btn-gold btn-gold--form" type="submit" id="orderSubmit">Оформить заказ</button>
@@ -213,7 +213,43 @@
     </div>
   </section>
 
+
+  <!-- ==================== ИНФОРМАЦИОННЫЕ СТРАНИЦЫ ==================== -->
+  <section class="view view-info" id="view-shops" hidden>
+    <h1 class="screen-title h-serif">Магазины</h1>
+    <div class="legal-card"><p class="legal-note">Шаблон: замените адреса на реальные.</p><h2>Адреса магазинов</h2><p><strong>Магазин «Фрейя»</strong><br>[Город], [улица, дом], [ТЦ/этаж/бутик].</p><p>График: [ежедневно с 10:00 до 21:00].</p><p><strong>Вторая точка</strong><br>[Город], [улица, дом], [ТЦ/этаж/бутик].</p></div>
+  </section>
+  <section class="view view-info" id="view-personal" hidden>
+    <h1 class="screen-title h-serif">Обработка персональных данных</h1>
+    <div class="legal-card"><p class="legal-note">Сайт — витрина без онлайн-оплаты. Заявка нужна только для связи по выбранным товарам.</p><h2>Согласие</h2><p>Оставляя заявку, пользователь даёт согласие [ИП ФИО] на обработку имени, номера телефона и состава заявки.</p><h2>Цель</h2><p>Данные используются для обратной связи, уточнения наличия товара и приглашения в офлайн-магазин для примерки или покупки.</p><h2>Важно</h2><p>Отправка заявки не является покупкой и не обязывает оплачивать товар.</p><h2>Отзыв согласия</h2><p>Отозвать согласие можно по адресу [email] или телефону [телефон].</p></div>
+  </section>
+  <section class="view view-info" id="view-details" hidden>
+    <h1 class="screen-title h-serif">Реквизиты</h1>
+    <div class="legal-card"><p class="legal-note">Заполните реальные реквизиты ИП.</p><h2>Продавец</h2><p>Индивидуальный предприниматель: [ФИО полностью]</p><p>ИНН: [ИНН]<br>ОГРНИП: [ОГРНИП]</p><p>Адрес: [адрес]</p><h2>Связь</h2><p>Телефон: <a class="inline-link" href="tel:+79999999999">[+7 999 999-99-99]</a><br>Email: <a class="inline-link" href="mailto:info@freya-st.ru">[info@freya-st.ru]</a></p></div>
+  </section>
+  <section class="view view-info" id="view-contacts" hidden>
+    <h1 class="screen-title h-serif">Контакты</h1>
+    <div class="legal-card"><h2>Связаться с магазином</h2><p>Телефон: <a class="inline-link" href="tel:+79999999999">[+7 999 999-99-99]</a></p><p>Email: <a class="inline-link" href="mailto:info@freya-st.ru">[info@freya-st.ru]</a></p><h2>Адрес</h2><p>[Город], [улица, дом], [ТЦ/этаж/бутик].</p><p>График: [ежедневно с 10:00 до 21:00].</p></div>
+  </section>
+  <section class="view view-info" id="view-policy" hidden>
+    <h1 class="screen-title h-serif">Политика конфиденциальности</h1>
+    <div class="legal-card"><p class="legal-note">Шаблон для сайта-витрины без онлайн-оплаты. Замените поля в квадратных скобках.</p><h2>1. Общие положения</h2><p>Политика описывает обработку персональных данных на сайте «Фрейя» при отправке заявки на выбранные товары.</p><h2>2. Оператор</h2><p>Оператор: [ИП ФИО], ИНН [ИНН], ОГРНИП [ОГРНИП]. Контакты: [телефон], [email].</p><h2>3. Данные</h2><p>Сайт получает имя, номер телефона, список выбранных товаров, дату и время заявки.</p><h2>4. Цели</h2><p>Обработка заявки, обратная связь, уточнение наличия и согласование визита в магазин.</p><h2>5. Онлайн-продажи</h2><p>Сайт является витриной. Онлайн-оплата не принимается, дистанционная покупка не оформляется.</p><h2>6. Права пользователя</h2><p>Пользователь может запросить удаление или уточнение данных по адресу [email].</p></div>
+  </section>
+
 </main>
+
+<!-- ============ ПОДВАЛ САЙТА ============ -->
+<footer class="site-footer" id="siteFooter">
+  <div class="footer-brand h-serif">Фрейя</div>
+  <nav class="footer-nav" aria-label="Информация о магазине">
+    <a href="#/shops">Магазины</a>
+    <a href="#/personal">Обработка персональных данных</a>
+    <a href="#/details">Реквизиты</a>
+    <a href="#/contacts">Контакты</a>
+    <a href="#/policy">Политика конфиденциальности</a>
+  </nav>
+  <p class="footer-copy">© <span id="footerYear">2026</span> Фрейя. Сайт является витриной: онлайн-оплата не принимается, покупка осуществляется в офлайн-магазине.</p>
+</footer>
 
 <!-- ============ БОКОВОЕ МЕНЮ КАТАЛОГА (три полоски слева вверху) ============ -->
 <div class="drawer-overlay" id="drawerOverlay" hidden>
