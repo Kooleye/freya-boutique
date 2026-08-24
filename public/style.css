@@ -1144,3 +1144,154 @@ body.is-pdp .site-footer { display: none; }
 .footer-nav a { min-height: 46px; display: flex; align-items: center; justify-content: space-between; padding: 0 2px; border-bottom: 1px solid rgba(216,188,133,.22); color: var(--gold-logo); font-size: 13px; line-height: 1.25; }
 .footer-nav a::after { content: ""; width: 8px; height: 8px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: rotate(-45deg); opacity: .9; }
 .footer-copy { margin: 18px 0 0; color: rgba(246,240,229,.55); font-size: 10.5px; line-height: 1.55; text-align: center; }
+
+
+/* ============================== АККУРАТНЫЙ ПОДВАЛ И ИНФО-СТРАНИЦЫ ============================== */
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  margin: 12px var(--pad) 0;
+  color: var(--gold-btn);
+  font-size: 12px;
+}
+.site-footer {
+  margin: 28px 0 0 !important;
+  padding: 0 0 calc(26px + env(safe-area-inset-bottom)) !important;
+  background: linear-gradient(180deg, #F7F6F3 0%, #F1EEE8 100%) !important;
+  color: var(--text) !important;
+  border-top: 1px solid #D8C8AA;
+}
+body.is-pdp .site-footer { display: none !important; }
+.footer-divider {
+  height: 6px;
+  background: linear-gradient(90deg, transparent 0%, var(--gold-btn) 18%, var(--gold-band) 50%, var(--gold-btn) 82%, transparent 100%);
+  opacity: .9;
+}
+.footer-inner { padding: 22px var(--pad) 0; }
+.footer-brand {
+  margin: 0 !important;
+  color: var(--green-header) !important;
+  font-size: 28px !important;
+  line-height: 1 !important;
+  text-align: center !important;
+}
+.footer-subtitle {
+  margin: 8px 0 18px;
+  color: var(--text-2);
+  font-size: 10px;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: .14em;
+}
+.footer-nav {
+  display: grid !important;
+  gap: 10px !important;
+  margin: 0 !important;
+}
+.footer-link {
+  min-height: 58px !important;
+  display: grid !important;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 13px !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  color: var(--text) !important;
+  box-shadow: 0 1px 0 rgba(0,0,0,.02);
+}
+.footer-link::after {
+  content: "";
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  width: 9px;
+  height: 9px;
+  border-right: 1.5px solid var(--gold-btn);
+  border-bottom: 1.5px solid var(--gold-btn);
+  transform: rotate(-45deg);
+}
+.footer-link span {
+  display: block;
+  color: var(--text);
+  font-size: 13.5px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+.footer-link i {
+  display: block;
+  margin-top: 3px;
+  color: var(--text-2);
+  font-style: normal;
+  font-size: 11px;
+  line-height: 1.2;
+}
+.footer-link:active { transform: translateY(1px); background: #FBFAF8; }
+.footer-copy {
+  margin: 18px 2px 0 !important;
+  color: var(--text-2) !important;
+  font-size: 10.5px !important;
+  line-height: 1.55 !important;
+  text-align: center !important;
+}
+.legal-card {
+  margin: 14px var(--pad) 0 !important;
+  padding: 16px !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--r-lg) !important;
+  background: var(--surface) !important;
+}
+.legal-card h2 {
+  margin: 18px 0 8px !important;
+  font-family: var(--font-serif) !important;
+  font-size: 18px !important;
+  font-weight: 400 !important;
+  line-height: 1.2 !important;
+}
+.legal-card p { margin: 8px 0 !important; font-size: 13px !important; line-height: 1.55 !important; }
+.legal-note { padding: 10px 12px !important; border-radius: var(--r-md) !important; background: #F2EADB !important; color: #5F4722 !important; }
+.inline-link { color: var(--gold-btn); text-decoration: underline; text-underline-offset: 2px; }
+
+
+/* Финальная правка: без крупного логотипа в подвале, заголовки инфо-страниц по центру */
+.site-footer .footer-brand { display: none !important; }
+.site-footer .footer-subtitle {
+  margin-top: 0 !important;
+  margin-bottom: 18px !important;
+}
+.view-info .screen-title {
+  text-align: center !important;
+  margin-left: var(--pad) !important;
+  margin-right: var(--pad) !important;
+}
+
+
+/* Аккуратная кнопка назад на внутренних страницах */
+.back-link {
+  width: fit-content !important;
+  min-height: 34px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  margin: 12px var(--pad) 0 !important;
+  padding: 0 12px 0 10px !important;
+  border: 1px solid rgba(168,128,63,.35) !important;
+  border-radius: 999px !important;
+  background: rgba(255,255,255,.72) !important;
+  color: var(--gold-btn) !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  line-height: 1 !important;
+  text-decoration: none !important;
+}
+.back-link span {
+  position: relative;
+  top: -1px;
+  font-size: 20px;
+  line-height: 1;
+}
+.back-link:active {
+  background: #F2EADB !important;
+  transform: translateY(1px);
+}

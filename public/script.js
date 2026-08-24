@@ -891,6 +891,7 @@
 
     // на карточке товара шапка скрыта — как на макете (фото во всю ширину)
     document.body.classList.toggle("is-pdp", name === "product");
+    document.body.classList.toggle("is-info", ["shops", "personal", "details", "contacts", "policy"].indexOf(name) !== -1);
     window.scrollTo(0, 0);
   }
 
