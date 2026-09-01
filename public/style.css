@@ -533,6 +533,7 @@ body.is-pdp .app-header { display: none; }
   margin-inline: 0;
 }
 .btn-gold:active { filter: brightness(.94); }
+.btn-gold:disabled { opacity: .65; cursor: wait; }
 .btn-gold[hidden] { display: none; }
 
 .btn-outline {
@@ -1252,6 +1253,7 @@ body.is-pdp .site-footer { display: none !important; }
 .legal-card p { margin: 8px 0 !important; font-size: 13px !important; line-height: 1.55 !important; }
 .legal-note { padding: 10px 12px !important; border-radius: var(--r-md) !important; background: #F2EADB !important; color: #5F4722 !important; }
 .inline-link { color: var(--gold-btn); text-decoration: underline; text-underline-offset: 2px; }
+.inline-link--plain { text-decoration: none; }
 
 
 /* Финальная правка: без крупного логотипа в подвале, заголовки инфо-страниц по центру */

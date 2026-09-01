@@ -16,12 +16,33 @@
   var PRODUCTS = [];      // только товары с галочкой «Показывать на сайте»
   var CATEGORIES = {};    // slug → название (+ служебный ключ all)
 
-  // Начальная корзина — ровно как на макете: 3 позиции, итого 31 700 ₽
-  var cart = [
-    { id: "dress",  size: "М", color: "Изумрудный", qty: 1 },
-    { id: "suit",   size: "S", color: "Бежевый",   qty: 1 },
-    { id: "collar", size: "М", color: "Молочный",  qty: 1 }
-  ];
+  var CART_KEY = "freya_cart_v1";
+
+  function readCart() {
+    try {
+      var saved = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
+      if (!Array.isArray(saved)) return [];
+      return saved.filter(function (item) {
+        return item && typeof item.id === "string" && item.id && Number(item.qty) > 0;
+      }).map(function (item) {
+        return {
+          id: item.id,
+          size: String(item.size || ""),
+          color: String(item.color || ""),
+          qty: Math.max(1, Math.min(20, Math.round(Number(item.qty) || 1)))
+        };
+      });
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function saveCart() {
+    try { localStorage.setItem(CART_KEY, JSON.stringify(cart)); } catch (e) {}
+  }
+
+  // Корзина начинается пустой и сохраняется между перезагрузками страницы.
+  var cart = readCart();
 
   /* ------------------------------ Утилиты ------------------------------ */
   var $ = function (sel, root) { return (root || document).querySelector(sel); };
@@ -344,6 +365,7 @@
     }
     if (found) found.qty += 1;
     else cart.push({ id: id, size: s, color: c, qty: 1 });
+    saveCart();
     renderCart();
     toast("Товар добавлен в корзину");
   }
@@ -357,11 +379,13 @@
       var step = Number(stepBtn.getAttribute("data-step"));
       cart[index].qty += step;
       if (cart[index].qty < 1) cart.splice(index, 1);
+      saveCart();
       renderCart();
       return;
     }
     if (e.target.closest(".ci-remove")) {
       cart.splice(index, 1);
+      saveCart();
       renderCart();
       toast("Товар удалён из корзины");
     }
@@ -755,8 +779,8 @@
       el.textContent = "Мы перезвоним для подтверждения заказа.";
       return;
     }
-    el.textContent = lastOrder.name + ", спасибо за заказ на " + price(lastOrder.sum) +
-      ". Мы перезвоним на " + lastOrder.phone + " для подтверждения.";
+    el.textContent = lastOrder.name + ", заказ №" + lastOrder.number + " на " + price(lastOrder.sum) +
+      " принят. Мы перезвоним на " + lastOrder.phone + " для подтверждения.";
   }
 
   $("#orderPhone").addEventListener("input", function (e) {
@@ -805,12 +829,41 @@
       return;
     }
 
-    lastOrder = { name: nameEl.value.trim(), phone: phoneEl.value, sum: cartSum() };
-    cart = [];
-    renderCart();
-    nameEl.value = "";
-    phoneEl.value = "";
-    location.hash = "#/done";
+    var button = $("#orderSubmit");
+    var customerName = nameEl.value.trim();
+    var customerPhone = phoneEl.value;
+    var sum = cartSum();
+    button.disabled = true;
+    button.textContent = "Отправляю заказ…";
+
+    FreyaApi.createOrder({
+      name: customerName,
+      phone: customerPhone,
+      items: cart.map(function (item) {
+        return { id: item.id, size: item.size, color: item.color, qty: item.qty };
+      })
+    }, function (res) {
+      button.disabled = false;
+      button.textContent = "Оформить заказ";
+      if (!res.ok || !res.data || !res.data.order) {
+        toast(res.error || "Не удалось отправить заказ — попробуйте ещё раз");
+        return;
+      }
+
+      lastOrder = {
+        name: customerName,
+        phone: customerPhone,
+        sum: res.data.order.total === undefined ? sum : res.data.order.total,
+        number: res.data.order.number
+      };
+      cart = [];
+      saveCart();
+      renderCart();
+      nameEl.value = "";
+      phoneEl.value = "";
+      $("#orderAgree").checked = false;
+      location.hash = "#/done";
+    });
   });
 
   /* --------------- Запрет приближения (double-tap и pinch) --------------- */
@@ -995,6 +1048,7 @@
 
     // товары, удалённые или скрытые в админке, убираются из корзины
     cart = cart.filter(function (it) { return byId(it.id); });
+    saveCart();
     renderCart();
 
     route();
@@ -1010,4 +1064,3 @@
 
   FreyaData.load(applyData);
 })();
-

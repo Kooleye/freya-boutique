@@ -60,6 +60,7 @@ const config = {
 	// Данные каталога и бэкапы — вне папки с кодом, деплой их не трогает
 	dataDir,
 	catalogFile: path.join(dataDir, "catalog.json"),
+	ordersFile: path.join(dataDir, "orders.json"),
 	backupsDir: path.join(dataDir, "backups"),
 	adminFile: path.join(dataDir, "admin.json"),
 	localMediaDir: path.join(dataDir, "media"),

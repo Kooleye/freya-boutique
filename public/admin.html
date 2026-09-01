@@ -14,7 +14,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="admin.css?v=20260822-2127">
+<link rel="stylesheet" href="admin.css?v=20260901-data-clean">
 </head>
 <body>
 
@@ -44,6 +44,7 @@
 
   <nav class="a-tabs" id="aTabs">
     <button class="a-tab is-active" type="button" data-tab="products">Товары</button>
+    <button class="a-tab" type="button" data-tab="orders">Заказы <span class="a-tab-count" id="ordersBadge" hidden>0</span></button>
     <button class="a-tab" type="button" data-tab="cats">Категории</button>
     <button class="a-tab" type="button" data-tab="settings">Настройки</button>
     <button class="a-tab" type="button" data-tab="data">Данные</button>
@@ -61,6 +62,27 @@
 
       <div class="p-list" id="pList"></div>
       <p class="a-empty" id="pEmpty" hidden>Ничего не найдено</p>
+    </section>
+
+    <!-- ---------- ЗАКАЗЫ ---------- -->
+    <section class="a-view" id="tab-orders" hidden>
+      <div class="a-bar o-toolbar">
+        <select class="input" id="orderFilter" aria-label="Фильтр заказов">
+          <option value="active">Активные заказы</option>
+          <option value="all">Все заказы</option>
+          <option value="new">Новые</option>
+          <option value="processing">В работе</option>
+          <option value="awaiting_customer">Ожидают ответа клиента</option>
+          <option value="confirmed">Подтверждённые</option>
+          <option value="shipped">Отправленные</option>
+          <option value="completed">Выполненные</option>
+          <option value="cancelled">Отменённые</option>
+        </select>
+        <button class="btn-outline btn-sm" type="button" id="refreshOrders">Обновить</button>
+      </div>
+      <p class="a-hint" id="ordersUpdated">Заказы обновляются автоматически.</p>
+      <div class="o-list" id="oList"></div>
+      <p class="a-empty" id="oEmpty" hidden>Заказов пока нет</p>
     </section>
 
     <!-- ---------- КАТЕГОРИИ ---------- -->
@@ -113,25 +135,6 @@
       <div class="a-card">
         <h2 class="a-h2">Состояние</h2>
         <div id="dStats"></div>
-      </div>
-
-      <div class="a-card">
-        <h2 class="a-h2">Файл каталога</h2>
-        <button class="btn-gold" type="button" id="exportBtn">Скачать catalog.json</button>
-        <label class="btn-outline file-btn">Загрузить catalog.json
-          <input type="file" id="importFile" accept=".json,application/json">
-        </label>
-        <button class="btn-danger" type="button" id="resetBtn">Сбросить к заводским данным</button>
-      </div>
-
-      <div class="a-note">
-        <p class="a-note-title">Как показать изменения всем посетителям</p>
-        <ol>
-          <li>Правки из админки сразу видны на этом устройстве — можно спокойно всё проверить.</li>
-          <li>Когда всё нравится — нажмите «Скачать catalog.json».</li>
-          <li>Положите файл в корень проекта (рядом с index.html) и задеплойте на Railway.</li>
-          <li>Сайт подхватит catalog.json автоматически — каталог увидят все посетители.</li>
-        </ol>
       </div>
     </section>
 
@@ -232,8 +235,8 @@
 
 <div class="a-toast" id="aToast" role="status" aria-live="polite"></div>
 
-<script src="api.js?v=20260822-2127"></script>
-<script src="data.js?v=20260822-2127"></script>
-<script src="admin.js?v=20260822-2127"></script>
+<script src="api.js?v=20260901-data-clean"></script>
+<script src="data.js?v=20260901-data-clean"></script>
+<script src="admin.js?v=20260901-data-clean"></script>
 </body>
 </html>

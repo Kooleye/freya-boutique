@@ -19,6 +19,19 @@
   var draftIndex = -1;    // -1 = новый товар
   var query = "";         // строка поиска
   var pendingCatDelete = null;  // slug категории, для которой спрашиваем подтверждение
+  var orderRows = [];
+  var orderFilter = "active";
+  var ordersLoading = false;
+  var ordersTimer = null;
+  var ORDER_STATUSES = [
+    { id: "new", label: "Новый" },
+    { id: "processing", label: "В работе" },
+    { id: "awaiting_customer", label: "Ожидает ответа клиента" },
+    { id: "confirmed", label: "Подтверждён" },
+    { id: "shipped", label: "Отправлен" },
+    { id: "completed", label: "Выполнен" },
+    { id: "cancelled", label: "Отменён" }
+  ];
 
   /* ------------------------------ Служебное ------------------------------ */
 
@@ -121,10 +134,14 @@
       if (res.ok && res.data && res.data.catalog) {
         data = FreyaData.normalize(res.data.catalog);
         renderAll();
+        loadOrders(true);
+        startOrdersPolling();
         return;
       }
       data = FreyaData.defaults();
       renderAll();
+      loadOrders(true);
+      startOrdersPolling();
       toast(res.error || "Сервер не отдал каталог — показываю заводские товары");
     });
   }
@@ -139,7 +156,141 @@
     $$(".a-view").forEach(function (view) {
       view.hidden = view.id !== "tab-" + name;
     });
+    if (name === "orders") loadOrders(true);
     window.scrollTo(0, 0);
+  });
+
+  /* ============================== ЗАКАЗЫ ============================== */
+
+  function orderStatusLabel(status) {
+    for (var i = 0; i < ORDER_STATUSES.length; i++) {
+      if (ORDER_STATUSES[i].id === status) return ORDER_STATUSES[i].label;
+    }
+    return status || "Новый";
+  }
+
+  function orderDate(value) {
+    var date = new Date(value);
+    if (isNaN(date.getTime())) return "";
+    return date.toLocaleString("ru-RU", {
+      day: "2-digit", month: "2-digit", year: "numeric",
+      hour: "2-digit", minute: "2-digit"
+    });
+  }
+
+  function orderStatusOptions(selected) {
+    return ORDER_STATUSES.map(function (item) {
+      return '<option value="' + item.id + '"' + (item.id === selected ? " selected" : "") + '>' + esc(item.label) + '</option>';
+    }).join("");
+  }
+
+  function orderCardHTML(order) {
+    var customer = order.customer || {};
+    var items = Array.isArray(order.items) ? order.items : [];
+    var phoneHref = String(customer.phone || "").replace(/[^+\d]/g, "");
+    var itemsHtml = items.map(function (item) {
+      var details = [item.color, item.size].filter(Boolean).join(" / ");
+      var productHref = "index.html#/product/" + encodeURIComponent(item.productId || "");
+      return '<div class="o-item">' +
+        '<div><b>' + esc(item.name || "Товар") + '</b>' +
+          (details ? '<div class="o-item-meta">' + esc(details) + '</div>' : '') +
+          (item.productId ? '<a class="o-item-link" href="' + esc(productHref) + '" target="_blank" rel="noopener">Открыть товар</a>' : '') + '</div>' +
+        '<div>' + (Number(item.qty) || 1) + ' × ' + price(Number(item.unitPrice) || 0) + '</div>' +
+      '</div>';
+    }).join("");
+
+    return '<article class="o-card" data-id="' + esc(order.id) + '" data-status="' + esc(order.status) + '">' +
+      '<div class="o-head"><div><h2 class="o-number">Заказ №' + esc(order.number) + '</h2>' +
+        '<p class="o-date">' + esc(orderDate(order.createdAt)) + '</p></div>' +
+        '<div class="o-total">' + price(Number(order.total) || 0) + '</div></div>' +
+      '<p class="o-customer"><b>' + esc(customer.name || "Без имени") + '</b><br>' +
+        '<a href="tel:' + esc(phoneHref) + '">' + esc(customer.phone || "Телефон не указан") + '</a></p>' +
+      '<div class="o-items">' + itemsHtml + '</div>' +
+      '<label class="o-status-label">Статус заказа</label>' +
+      '<select class="input o-status" data-previous="' + esc(order.status) + '" aria-label="Статус заказа №' + esc(order.number) + '">' +
+        orderStatusOptions(order.status) + '</select>' +
+    '</article>';
+  }
+
+  function filteredOrders() {
+    if (orderFilter === "all") return orderRows;
+    if (orderFilter === "active") {
+      return orderRows.filter(function (order) {
+        return order.status !== "completed" && order.status !== "cancelled";
+      });
+    }
+    return orderRows.filter(function (order) { return order.status === orderFilter; });
+  }
+
+  function renderOrders() {
+    var rows = filteredOrders();
+    $("#oList").innerHTML = rows.map(orderCardHTML).join("");
+    $("#oEmpty").hidden = rows.length > 0;
+    $("#oEmpty").textContent = orderRows.length ? "В этом разделе заказов нет" : "Заказов пока нет";
+    var fresh = orderRows.filter(function (order) { return order.status === "new"; }).length;
+    $("#ordersBadge").textContent = fresh;
+    $("#ordersBadge").hidden = fresh === 0;
+  }
+
+  function loadOrders(silent) {
+    if (ordersLoading) return;
+    ordersLoading = true;
+    if (!silent) toast("Обновляю заказы…");
+    FreyaApi.getOrders(function (res) {
+      ordersLoading = false;
+      if (!res.ok || !res.data) {
+        if (res.status === 401) {
+          toast("Сеанс закончился — войдите заново");
+          setTimeout(function () { location.reload(); }, 1500);
+          return;
+        }
+        if (!silent) toast(res.error || "Не удалось получить заказы");
+        return;
+      }
+      orderRows = Array.isArray(res.data.orders) ? res.data.orders : [];
+      if (Array.isArray(res.data.statuses) && res.data.statuses.length) ORDER_STATUSES = res.data.statuses;
+      renderOrders();
+      $("#ordersUpdated").textContent = orderRows.length
+        ? "Обновлено: " + new Date().toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" })
+        : "Новых заказов пока нет. Список обновляется автоматически.";
+    });
+  }
+
+  function startOrdersPolling() {
+    if (ordersTimer) return;
+    ordersTimer = setInterval(function () {
+      if (!document.hidden) loadOrders(true);
+    }, 30000);
+  }
+
+  $("#orderFilter").addEventListener("change", function () {
+    orderFilter = this.value;
+    renderOrders();
+  });
+
+  $("#refreshOrders").addEventListener("click", function () { loadOrders(false); });
+
+  $("#oList").addEventListener("change", function (e) {
+    var select = e.target.closest(".o-status");
+    if (!select) return;
+    var card = select.closest(".o-card");
+    var id = card.getAttribute("data-id");
+    var previous = select.getAttribute("data-previous") || "new";
+    var next = select.value;
+    select.disabled = true;
+    FreyaApi.updateOrderStatus(id, next, function (res) {
+      select.disabled = false;
+      if (!res.ok || !res.data || !res.data.order) {
+        select.value = previous;
+        toast(res.error || "Не удалось изменить статус");
+        return;
+      }
+      for (var i = 0; i < orderRows.length; i++) {
+        if (orderRows[i].id === id) { orderRows[i] = res.data.order; break; }
+      }
+      renderOrders();
+      toast("Статус: " + orderStatusLabel(next));
+    });
   });
 
   /* ============================== ТОВАРЫ ============================== */
@@ -860,16 +1011,12 @@
       '<div class="d-row"><span>Фотографий</span><b>' + photos + "</b></div>" +
       '<div class="d-row"><span>Видео</span><b>' + videos + "</b></div>" +
       '<div class="d-row"><span>Последняя правка</span><b>' + esc(when) + "</b></div>" +
-      '<div class="d-row" id="dFile"><span>Файл каталога</span><b>спрашиваю сервер…</b></div>' +
       '<div class="d-row" id="dBackups"><span>Резервных копий</span><b>…</b></div>' +
       '<div class="d-row" id="dStorage"><span>Хранилище медиа</span><b>проверяю…</b></div>';
 
     FreyaApi.stats(function (res) {
-      var fileRow = $("#dFile");
       var backupRow = $("#dBackups");
-      if (!fileRow || !res.ok || !res.data) return;
-      var kb = Math.max(1, Math.round((res.data.bytes || 0) / 1024));
-      fileRow.innerHTML = "<span>Файл каталога</span><b>" + kb + " КБ</b>";
+      if (!backupRow || !res.ok || !res.data) return;
       if (backupRow) {
         backupRow.innerHTML = "<span>Резервных копий</span><b>" + (res.data.backups || 0) + "</b>";
       }
@@ -886,63 +1033,6 @@
       row.innerHTML = "<span>Хранилище медиа</span><b>" + esc(name + " · " + state) + "</b>";
     });
   }
-
-  function downloadJson(payload) {
-    var blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
-    var url = URL.createObjectURL(blob);
-    var link = document.createElement("a");
-    link.href = url;
-    link.download = "catalog.json";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
-    toast("Файл catalog.json готов");
-  }
-
-  // В файл попадает только текст каталога и ключи файлов — сами фото и видео
-  // лежат в S3. Поэтому выгрузка лёгкая и годится как резервная копия.
-  $("#exportBtn").addEventListener("click", function () {
-    downloadJson(FreyaData.clone(data));
-  });
-
-  $("#importFile").addEventListener("change", function () {
-    var file = this.files && this.files[0];
-    this.value = "";
-    if (!file) return;
-    var reader = new FileReader();
-    reader.onload = function () {
-      var parsed;
-      try { parsed = JSON.parse(reader.result); }
-      catch (e) { toast("Это не похоже на catalog.json"); return; }
-
-      var incoming = FreyaData.normalize(parsed);
-
-      // Старые выгрузки с фото внутри файла сервер не примет:
-      // такой каталог переносится один раз командой npm run migrate.
-      var inline = 0;
-      incoming.products.forEach(function (p) {
-        (p.images || []).forEach(function (src) {
-          if (typeof src === "string" && (src.indexOf("data:") === 0 || src.indexOf("idb:") === 0)) inline++;
-        });
-        (p.videos || []).forEach(function (v) {
-          if (v && typeof v.src === "string" && (v.src.indexOf("data:") === 0 || v.src.indexOf("idb:") === 0)) inline++;
-        });
-      });
-      if (inline) {
-        toast("В файле " + inline + " фото/видео внутри — перенесите их командой npm run migrate");
-        return;
-      }
-
-      mutate(function () { data = incoming; }, "Каталог загружен");
-    };
-    reader.readAsText(file);
-  });
-
-  $("#resetBtn").addEventListener("click", function () {
-    if (!confirm("Сбросить все товары и вернуть заводские? Предыдущая версия останется в резервных копиях на сервере.")) return;
-    mutate(function () { data = FreyaData.defaults(); }, "Заводские товары восстановлены");
-  });
 
   /* ============================== Общая отрисовка ============================== */
 

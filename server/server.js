@@ -22,6 +22,7 @@ const storage = require("./lib/storage");
 const media = require("./lib/media");
 const catalog = require("./lib/catalog");
 const auth = require("./lib/auth");
+const orders = require("./lib/orders");
 
 const MIME = {
 	".html": "text/html; charset=utf-8",
@@ -219,6 +220,22 @@ async function requireAdmin(req, res) {
 	return false;
 }
 
+// Публичная форма заказа: защита от случайного или автоматического спама.
+const orderAttempts = new Map();
+function allowOrder(req) {
+	const key = auth.rateKey(req);
+	const now = Date.now();
+	const windowMs = 30 * 60 * 1000;
+	const entry = orderAttempts.get(key);
+	if (!entry || now - entry.since > windowMs) {
+		orderAttempts.set(key, { count: 1, since: now });
+		return true;
+	}
+	if (entry.count >= 10) return false;
+	entry.count++;
+	return true;
+}
+
 // Проверка, что ffmpeg и ffprobe вообще есть на сервере
 async function checkTools() {
 	const out = { ffmpeg: false, ffprobe: false };
@@ -314,6 +331,60 @@ async function handleApi(req, res, url) {
 	if (route === "/api/catalog/stats" && method === "GET") {
 		if (!(await requireAdmin(req, res))) return true;
 		sendJson(res, 200, Object.assign({ ok: true }, await catalog.stats()));
+		return true;
+	}
+
+	// Покупатель создаёт заказ, а читать и менять его может только администратор.
+	if (route === "/api/orders" && method === "POST") {
+		if (!allowOrder(req)) {
+			fail(res, 429, "Слишком много заказов — попробуйте немного позже");
+			return true;
+		}
+		const body = await readJson(req, 1);
+		const catalogData = await catalog.read();
+		if (!catalogData) {
+			fail(res, 503, "Каталог временно недоступен");
+			return true;
+		}
+		try {
+			const order = await orders.create(body, catalogData);
+			sendJson(res, 201, {
+				ok: true,
+				order: {
+					id: order.id,
+					number: order.number,
+					createdAt: order.createdAt,
+					quantity: order.quantity,
+					total: order.total,
+				},
+			});
+		} catch (err) {
+			fail(res, err.status || 500, err.message || "Не удалось принять заказ");
+		}
+		return true;
+	}
+
+	if (route === "/api/orders" && method === "GET") {
+		if (!(await requireAdmin(req, res))) return true;
+		sendJson(res, 200, {
+			ok: true,
+			orders: await orders.list(),
+			statuses: orders.STATUSES,
+			stats: await orders.stats(),
+		});
+		return true;
+	}
+
+	const orderMatch = route.match(/^\/api\/orders\/([0-9a-f-]+)$/i);
+	if (orderMatch && (method === "PATCH" || method === "PUT")) {
+		if (!(await requireAdmin(req, res))) return true;
+		const body = await readJson(req, 1);
+		try {
+			const order = await orders.updateStatus(orderMatch[1], String(body.status || ""));
+			sendJson(res, 200, { ok: true, order });
+		} catch (err) {
+			fail(res, err.status || 500, err.message || "Не удалось обновить заказ");
+		}
 		return true;
 	}
 
@@ -474,6 +545,7 @@ async function handleApi(req, res, url) {
 			node: process.version,
 			uptime: Math.round(process.uptime()),
 			catalog: await catalog.stats().catch(() => null),
+			orders: await orders.stats().catch(() => null),
 		};
 		if (deep) {
 			try {

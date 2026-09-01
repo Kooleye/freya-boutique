@@ -28,6 +28,7 @@ http
 
 				const tools = info.tools || {};
 				const catalogInfo = info.catalog || {};
+				const ordersInfo = info.orders || {};
 				const kb = catalogInfo.bytes ? Math.round(catalogInfo.bytes / 1024) + " КБ" : "пока пусто";
 
 				console.log("");
@@ -37,6 +38,7 @@ http
 				console.log("ffmpeg       : " + (tools.ffmpeg ? "есть" : "НЕТ — видео и фото не пережмутся"));
 				console.log("ffprobe      : " + (tools.ffprobe ? "есть" : "НЕТ"));
 				console.log("Каталог      : " + (catalogInfo.file || "неизвестно") + " · " + kb + " · копий: " + (catalogInfo.backups || 0));
+				console.log("Заказы       : " + (ordersInfo.total || 0) + " · новых: " + ((ordersInfo.counts && ordersInfo.counts.new) || 0));
 				console.log("");
 
 				const bad = info.storageOk === false || !tools.ffmpeg || !tools.ffprobe;

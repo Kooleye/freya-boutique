@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # =========================================================================
-#  Суточная резервная копия каталога товаров.
+#  Суточная резервная копия каталога, заказов и настроек администратора.
 #
 #  Сервер и без того делает копию при каждой правке (data/backups),
 #  но этот скрипт складывает ещё и суточные архивы.
@@ -27,6 +27,7 @@ ARCHIVE="$OUT/catalog-$STAMP.tar.gz"
 
 FILES="catalog.json"
 [ -f "$DATA/admin.json" ] && FILES="$FILES admin.json"
+[ -f "$DATA/orders.json" ] && FILES="$FILES orders.json"
 
 tar -C "$DATA" -czf "$ARCHIVE" $FILES
 echo "[$(date)] копия: $ARCHIVE ($(du -h "$ARCHIVE" | cut -f1))"

@@ -185,6 +185,18 @@
 			request("PUT", "/api/catalog", { catalog: data }, done);
 		},
 
+		createOrder: function (data, done) {
+			request("POST", "/api/orders", data, done);
+		},
+
+		getOrders: function (done) {
+			request("GET", "/api/orders", null, done);
+		},
+
+		updateOrderStatus: function (id, status, done) {
+			request("PATCH", "/api/orders/" + encodeURIComponent(id), { status: status }, done);
+		},
+
 		session: function (done) {
 			request("GET", "/api/session", null, done);
 		},

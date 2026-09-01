@@ -21,7 +21,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- На макете логотип и заголовки набраны контрастной антиквой (тип Playfair Display / Prata) -->
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=20260824-2012">
+<link rel="stylesheet" href="style.css?v=20260901-data-clean">
 </head>
 <body>
 
@@ -36,7 +36,7 @@
       <path d="M4.5 8.5h15l-1 11.5h-13z"/>
       <path d="M9 8.5V7a3 3 0 0 1 6 0v1.5"/>
     </svg>
-    <span class="cart-count" id="cartCount">3</span>
+    <span class="cart-count" id="cartCount" hidden>0</span>
   </a>
 </header>
 
@@ -150,7 +150,7 @@
 
   <!-- ==================== СТРАНИЦА 4. КОРЗИНА ==================== -->
   <section class="view" id="view-cart" hidden>
-    <h1 class="screen-title h-serif">Корзина (<span id="cartTitleCount">3</span>)</h1>
+    <h1 class="screen-title h-serif">Корзина (<span id="cartTitleCount">0</span>)</h1>
 
     <div class="cart-list" id="cartList"></div>
 
@@ -158,7 +158,7 @@
 
     <div class="cart-total" id="cartTotalRow">
       <span class="h-serif">Итого</span>
-      <span class="h-serif" id="cartTotal">31 700 ₽</span>
+      <span class="h-serif" id="cartTotal">0 ₽</span>
     </div>
 
     <a class="btn-gold" href="#/checkout" id="cartCheckout">Оформить заказ</a>
@@ -173,8 +173,8 @@
     <h1 class="screen-title h-serif">Формирование заказа</h1>
 
     <div class="order-summary">
-      <span>Товаров: <span id="orderCount">3</span></span>
-      <span class="h-serif" id="orderTotal">31 700 ₽</span>
+      <span>Товаров: <span id="orderCount">0</span></span>
+      <span class="h-serif" id="orderTotal">0 ₽</span>
     </div>
 
     <form class="order-form" id="orderForm" novalidate>
@@ -220,35 +220,35 @@
       <span aria-hidden="true">‹</span> Назад
     </a>
     <h1 class="screen-title h-serif">Магазины</h1>
-    <div class="legal-card"><p class="legal-note">Шаблон: замените адреса на реальные.</p><h2>Адреса магазинов</h2><p><strong>Магазин «Фрейя»</strong><br>[Город], [улица, дом], [ТЦ/этаж/бутик].</p><p>График: [ежедневно с 10:00 до 21:00].</p><p><strong>Вторая точка</strong><br>[Город], [улица, дом], [ТЦ/этаж/бутик].</p></div>
+    <div class="legal-card"><h2>Адреса магазинов</h2><p>г. Стерлитамак, ул. Комсомольская, д. 5, 1 этаж, секция 8.</p><p><strong>Вторая точка</strong><br>г. Стерлитамак, ул. Комсомольская, д. 5, 1 этаж, торговая точка 37.</p><p>График: ежедневно с 10:00 до 19:00.</p></div>
   </section>
   <section class="view view-info" id="view-personal" hidden>
     <a class="back-link" href="#/">
       <span aria-hidden="true">‹</span> Назад
     </a>
     <h1 class="screen-title h-serif">Обработка персональных данных</h1>
-    <div class="legal-card"><p class="legal-note">Сайт — витрина без онлайн-оплаты. Заявка нужна только для связи по выбранным товарам.</p><h2>Согласие</h2><p>Оставляя заявку, пользователь даёт согласие [ИП ФИО] на обработку имени, номера телефона и состава заявки.</p><h2>Цель</h2><p>Данные используются для обратной связи, уточнения наличия товара и приглашения в офлайн-магазин для примерки или покупки.</p><h2>Важно</h2><p>Отправка заявки не является покупкой и не обязывает оплачивать товар.</p><h2>Отзыв согласия</h2><p>Отозвать согласие можно по адресу [email] или телефону [телефон].</p></div>
+    <div class="legal-card"><h2>Согласие</h2><p>Оставляя заявку, пользователь даёт согласие индивидуальному предпринимателю Низковой Ксении Анатольевне на обработку имени, номера телефона и состава заявки.</p><h2>Цель</h2><p>Данные используются для обратной связи, уточнения наличия товара и приглашения в офлайн-магазин для примерки или покупки.</p><h2>Важно</h2><p>Отправка заявки не является покупкой и не обязывает оплачивать товар.</p><h2>Отзыв согласия</h2><p>Отозвать согласие можно по адресу <a class="inline-link inline-link--plain" href="mailto:kseniyanizkova88@bk.ru">kseniyanizkova88@bk.ru</a> или телефону <a class="inline-link inline-link--plain" href="tel:+79177961575">+7 (917) 796-15-75</a>.</p></div>
   </section>
   <section class="view view-info" id="view-details" hidden>
     <a class="back-link" href="#/">
       <span aria-hidden="true">‹</span> Назад
     </a>
     <h1 class="screen-title h-serif">Реквизиты</h1>
-    <div class="legal-card"><p class="legal-note">Заполните реальные реквизиты ИП.</p><h2>Продавец</h2><p>Индивидуальный предприниматель: [ФИО полностью]</p><p>ИНН: [ИНН]<br>ОГРНИП: [ОГРНИП]</p><p>Адрес: [адрес]</p><h2>Связь</h2><p>Телефон: <a class="inline-link" href="tel:+79999999999">[+7 999 999-99-99]</a><br>Email: <a class="inline-link" href="mailto:info@freya-st.ru">[info@freya-st.ru]</a></p></div>
+    <div class="legal-card"><h2>Продавец</h2><p>ИП: Низкова Ксения Анатольевна</p><p>ИНН: 026802821608<br>ОГРНИП: 326028000041565</p><p>Адрес: ул. Коммунистическая, 59-119</p><h2>Связь</h2><p>Телефон: <a class="inline-link inline-link--plain" href="tel:+79177961575">+7 (917) 796-15-75</a><br>Email: <a class="inline-link inline-link--plain" href="mailto:kseniyanizkova88@bk.ru">kseniyanizkova88@bk.ru</a></p></div>
   </section>
   <section class="view view-info" id="view-contacts" hidden>
     <a class="back-link" href="#/">
       <span aria-hidden="true">‹</span> Назад
     </a>
     <h1 class="screen-title h-serif">Контакты</h1>
-    <div class="legal-card"><h2>Связаться с магазином</h2><p>Телефон: <a class="inline-link" href="tel:+79999999999">[+7 999 999-99-99]</a></p><p>Email: <a class="inline-link" href="mailto:info@freya-st.ru">[info@freya-st.ru]</a></p><h2>Адрес</h2><p>[Город], [улица, дом], [ТЦ/этаж/бутик].</p><p>График: [ежедневно с 10:00 до 21:00].</p></div>
+    <div class="legal-card"><h2>Связаться с магазином</h2><p>Телефон: <a class="inline-link inline-link--plain" href="tel:+79177961575">+7 (917) 796-15-75</a></p><p>Email: <a class="inline-link inline-link--plain" href="mailto:kseniyanizkova88@bk.ru">kseniyanizkova88@bk.ru</a></p><h2>Адреса</h2><p>г. Стерлитамак, ул. Комсомольская, д. 5, 1 этаж, секция 8.</p><p><strong>Вторая точка</strong><br>г. Стерлитамак, ул. Комсомольская, д. 5, 1 этаж, торговая точка 37.</p><p>График: ежедневно с 10:00 до 19:00.</p></div>
   </section>
   <section class="view view-info" id="view-policy" hidden>
     <a class="back-link" href="#/">
       <span aria-hidden="true">‹</span> Назад
     </a>
     <h1 class="screen-title h-serif">Политика конфиденциальности</h1>
-    <div class="legal-card"><p class="legal-note">Шаблон для сайта-витрины без онлайн-оплаты. Замените поля в квадратных скобках.</p><h2>1. Общие положения</h2><p>Политика описывает обработку персональных данных на сайте «Фрейя» при отправке заявки на выбранные товары.</p><h2>2. Оператор</h2><p>Оператор: [ИП ФИО], ИНН [ИНН], ОГРНИП [ОГРНИП]. Контакты: [телефон], [email].</p><h2>3. Данные</h2><p>Сайт получает имя, номер телефона, список выбранных товаров, дату и время заявки.</p><h2>4. Цели</h2><p>Обработка заявки, обратная связь, уточнение наличия и согласование визита в магазин.</p><h2>5. Онлайн-продажи</h2><p>Сайт является витриной. Онлайн-оплата не принимается, дистанционная покупка не оформляется.</p><h2>6. Права пользователя</h2><p>Пользователь может запросить удаление или уточнение данных по адресу [email].</p></div>
+    <div class="legal-card"><h2>1. Общие положения</h2><p>Политика описывает обработку персональных данных на сайте «Фрейя» при отправке заявки на выбранные товары.</p><h2>2. Оператор</h2><p>Оператор: ИП Низкова Ксения Анатольевна, ИНН 026802821608, ОГРНИП 326028000041565. Контакты: <a class="inline-link inline-link--plain" href="tel:+79177961575">+7 (917) 796-15-75</a>, <a class="inline-link inline-link--plain" href="mailto:kseniyanizkova88@bk.ru">kseniyanizkova88@bk.ru</a>.</p><h2>3. Данные</h2><p>Сайт получает имя, номер телефона, список выбранных товаров, дату и время заявки.</p><h2>4. Цели</h2><p>Обработка заявки, обратная связь, уточнение наличия и согласование визита в магазин.</p><h2>5. Онлайн-продажи</h2><p>Сайт является витриной. Онлайн-оплата не принимается, дистанционная покупка не оформляется.</p><h2>6. Права пользователя</h2><p>Пользователь может запросить удаление или уточнение данных по адресу <a class="inline-link inline-link--plain" href="mailto:kseniyanizkova88@bk.ru">kseniyanizkova88@bk.ru</a>.</p></div>
   </section>
 
 </main>
@@ -266,7 +266,7 @@
       <a href="#/personal">Обработка персональных данных</a>
     </div>
   </nav>
-  <p class="footer-copy">© <span id="footerYear">2026</span> Фрейя · сайт-витрина без онлайн-оплаты</p>
+  <p class="footer-copy">© <span id="footerYear">2026</span> Фрейя · сайт-витрина</p>
 </footer>
 
 <!-- ============ БОКОВОЕ МЕНЮ КАТАЛОГА (три полоски слева вверху) ============ -->
@@ -282,7 +282,7 @@
     <ul class="drawer-list" id="drawerList"></ul>
 
     <ul class="drawer-list drawer-list--secondary">
-      <li><a href="#/cart">Корзина<i id="drawerCartCount">3</i></a></li>
+      <li><a href="#/cart">Корзина<i id="drawerCartCount">0</i></a></li>
     </ul>
 
     <p class="drawer-foot">БУТИК ЖЕНСКОЙ ОДЕЖДЫ<br>ПРЕМИАЛЬНЫЙ ОПЫТ ПОКУПОК</p>
@@ -334,8 +334,8 @@
 <!-- ============ TOAST ============ -->
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="api.js?v=20260824-2012"></script>
-<script src="data.js?v=20260824-2012"></script>
-<script src="script.js?v=20260824-2012"></script>
+<script src="api.js?v=20260901-data-clean"></script>
+<script src="data.js?v=20260901-data-clean"></script>
+<script src="script.js?v=20260901-data-clean"></script>
 </body>
 </html>
