@@ -12,7 +12,7 @@
   };
 
   var SESSION_KEY = "freya_admin_session";
-  var STD_SIZES = ["XS", "S", "M", "L", "XL", "XXL", "42", "44", "46", "48"];
+  var STD_SIZES = ["XS", "S", "M", "L", "XL", "35", "36", "37", "38", "39", "40", "42", "44", "46", "48"];
 
   var data = null;        // текущие данные магазина
   var draft = null;       // товар в редакторе
